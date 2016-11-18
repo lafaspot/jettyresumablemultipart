@@ -1,2 +1,3 @@
-# jersey_mime_partial
-Jersey MIME Parser and MultiPart Support for Partial MIME
+#jettyresumablemultipart
+This repository contains MIME parser and other MIME classes to populate Multipart object, even if the MIME stream is partial (based on a configuration).
+It also contains jersey reader classes to use that Multipart classes to convert input stream to multi part form data objects(which may have a partial MIME). There is a jersey interceptor (MultiPartPartialReaderInterceptor) which uses these reader classes and the MIME classes. This interceptor uses an annotator (AnnotationInterceptorMultiPartResumable) for jersey name binding. This annotator can be used with any Jersey resource. If the annotator is used then that resource will use this interceptor to serialize the input stream. For more details check name binding in the document : https://jersey.java.net/documentation/latest/filters-and-interceptors.html
