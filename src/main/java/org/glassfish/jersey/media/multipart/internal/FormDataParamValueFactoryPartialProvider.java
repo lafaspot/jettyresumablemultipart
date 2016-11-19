@@ -47,9 +47,7 @@ import jersey.repackaged.com.google.common.collect.Lists;
  * Value factory provider supporting the {@link FormDataParam} injection annotation and entity ({@link FormDataMultiPart})
  * injection.
  *
- * @author Craig McClanahan
- * @author Paul Sandoz
- * @author Michal Gajdos (michal.gajdos at oracle.com)
+ * @author nabanita
  */
 final class FormDataParamValueFactoryPartialProvider extends AbstractValueFactoryProvider {
 

@@ -18,9 +18,7 @@ import org.jvnet.mimepull.MIMEPartPartial;
  * This is a direct extension of BodyPartEntity, except the MIMEPart is changed to MIMEPartPartial. All methods are overridden because of private
  * variables.
  *
- * @author Craig McClanahan
- * @author Paul Sandoz
- * @author Michal Gajdos (michal.gajdos at oracle.com)
+ * @author wayneng
  */
 public class BodyPartEntityPartial extends BodyPartEntity implements Closeable {
 

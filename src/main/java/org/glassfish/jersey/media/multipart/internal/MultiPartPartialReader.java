@@ -39,6 +39,8 @@ import org.jvnet.mimepull.MIMEPartPartial;
 
 /**
  * This code is taken from MultiPartReaderClientSide {@link MultiPartReaderClientSide}. Only difference is this uses the partial mime parser.
+ *
+ * @author nabanita
  */
 @Consumes("multipart/*")
 @Singleton

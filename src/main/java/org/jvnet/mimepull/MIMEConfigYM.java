@@ -6,8 +6,8 @@ import java.io.File;
  * Configuration for MIME message parsing and storing.
  *
  * This is a customized extension for constructor overload that passes in sizing info. Everything else is overridden because of private vars.
- *
- * @author Jitendra Kotamraju
+ * 
+ * @author wayneng
  */
 public class MIMEConfigYM extends MIMEConfig {
 
