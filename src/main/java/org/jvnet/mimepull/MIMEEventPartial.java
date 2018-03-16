@@ -30,7 +30,7 @@ abstract class MIMEEventPartial extends MIMEEvent {
          *
          * @param buf ByteBuffer.
          */
-        ContentPartial(final ByteBuffer buf) {
+        ContentPartial(ByteBuffer buf) {
             this(buf, false);
         }
 
@@ -40,7 +40,7 @@ abstract class MIMEEventPartial extends MIMEEvent {
          * @param buf ByteBuffer.
          * @param isPartial boolean.
          */
-        ContentPartial(final ByteBuffer buf, final boolean isPartial) {
+        ContentPartial(ByteBuffer buf, boolean isPartial) {
             this.bufPartial = buf;
             this.isPartial = isPartial;
         }
@@ -55,8 +55,6 @@ abstract class MIMEEventPartial extends MIMEEvent {
 
         /**
          * No change from base class.
-         *
-         * @return ByteBuffer.
          */
         ByteBuffer getData() {
             return bufPartial;
@@ -71,64 +69,4 @@ abstract class MIMEEventPartial extends MIMEEvent {
             return isPartial;
         }
     }
-
-    /**
-     * Customized class for partial message enabling.
-     *
-     * @author wayneng
-     *
-     */
-    static final class HeadersPartial extends MIMEEvent {
-        /** No change from base class. */
-        private final InternetHeaders ih;
-        /** For partial message enabling. */
-        private final boolean isPartial;
-
-        /**
-         * No change from base class.
-         *
-         * @param ih InternetHeaders.
-         */
-        HeadersPartial(final InternetHeaders ih) {
-            this(ih, false);
-        }
-
-        /**
-         * Constructor for partial Header.
-         *
-         * @param ih InternetHeaders.
-         * @param isPartial boolean.
-         */
-        HeadersPartial(final InternetHeaders ih, final boolean isPartial) {
-            this.ih = ih;
-            this.isPartial = isPartial;
-        }
-
-        /**
-         * No change from base class.
-         */
-        @Override
-        EVENT_TYPE getEventType() {
-            return EVENT_TYPE.HEADERS;
-        }
-
-        /**
-         * No change from base class.
-         *
-         * @return InternetHeaders.
-         */
-        InternetHeaders getHeaders() {
-            return ih;
-        }
-
-        /**
-         * getter for isPartial.
-         *
-         * @return boolean.
-         */
-        boolean getIsPartial() {
-            return isPartial;
-        }
-    }
-
 }

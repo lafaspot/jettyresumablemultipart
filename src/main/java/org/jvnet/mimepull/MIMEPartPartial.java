@@ -94,7 +94,6 @@ public class MIMEPartPartial extends MIMEPart {
         super(msg);
         this.msgPartial = msg;
         this.dataHeadPartial = new DataHead(this);
-        this.isPartial = false;
     }
 
     /**
@@ -121,7 +120,7 @@ public class MIMEPartPartial extends MIMEPart {
     public InputStream read() {
         InputStream is = null;
         try {
-            is = MimeUtilityPartial.decode(dataHeadPartial.read(), contentTransferEncodingPartial, isPartial);                
+            is = MimeUtility.decode(dataHeadPartial.read(), contentTransferEncodingPartial);
         } catch (DecodingException ex) { // ignore
             // logging goes here
         }
@@ -160,7 +159,7 @@ public class MIMEPartPartial extends MIMEPart {
     public InputStream readOnce() {
         InputStream is = null;
         try {
-            is = MimeUtilityPartial.decode(dataHeadPartial.readOnce(), contentTransferEncodingPartial, isPartial);
+            is = MimeUtility.decode(dataHeadPartial.readOnce(), contentTransferEncodingPartial);
         } catch (DecodingException ex) { // ignore
             // logging goes here
         }

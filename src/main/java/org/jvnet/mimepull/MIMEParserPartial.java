@@ -46,7 +46,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 /**
  * Represents MIME message. MIME message parsing is done lazily using a
@@ -126,10 +125,6 @@ class MIMEParserPartial extends MIMEParser {
     private boolean bolPartial; // beginning of the line
     /** boolean for partial messages. */
     protected boolean isPartial = false;
-    /** boolean for partial header, which designates message is partial. */
-    protected boolean isPartialHeader = false;
-    /** boolean for partial body, which designates message is partial. */
-    protected boolean isPartialContent = false;
     /** maxInputStreamSizePartial limit. */
     protected final int maxInputStreamSizePartial;
     /** counter for number of bytes read from InputStream. */
@@ -196,9 +191,6 @@ class MIMEParserPartial extends MIMEParser {
          */
         @Override
         public MIMEEvent next() {
-            if (parsedPartial) {
-                throw new NoSuchElementException();
-            }
             switch (statePartial) {
             case START_MESSAGE:
                 statePartial = STATE.SKIP_PREAMBLE;
@@ -215,16 +207,13 @@ class MIMEParserPartial extends MIMEParser {
                 InternetHeaders ih = readHeaders();
                 statePartial = STATE.BODY;
                 bolPartial = true;
-                if (isPartialHeader) {
-                    return new MIMEEventPartial.HeadersPartial(ih, isPartialHeader);
-                }
-                return new MIMEEventPartial.HeadersPartial(ih);
+                return new MIMEEvent.Headers(ih);
 
             case BODY:
                 ByteBuffer bufPartial = readBody();
                 bolPartial = false;
-                if (isPartialContent) {
-                    return new MIMEEventPartial.ContentPartial(bufPartial, isPartialContent);
+                if (isPartial) {
+                    return new MIMEEventPartial.ContentPartial(bufPartial, isPartial);
                 }
                 return new MIMEEventPartial.ContentPartial(bufPartial);
 
@@ -263,7 +252,7 @@ class MIMEParserPartial extends MIMEParser {
         if (!eofPartial) {
             fillBuf();
         }
-        return new InternetHeaders(new LineInputStreamPartial());
+        return new InternetHeaders(new LineInputStream());
     }
 
     /**
@@ -287,7 +276,6 @@ class MIMEParserPartial extends MIMEParser {
                 donePartial = true;
                 if (configPartial.isEnablePartial()) {
                     // This is for partial message parsing.
-                    isPartialContent = true;
                     isPartial = true;
                     statePartial = STATE.END_PART;
                     // This is for truncating at 4 byte boundaries for base64 encoding, and don't care for other encoding formats.
@@ -528,18 +516,7 @@ class MIMEParserPartial extends MIMEParser {
                 read = inPartial.read(bufPartial, lenPartial, bufPartial.length - lenPartial);
             } catch (IOException ioe) {
                 final String msg = ioe.getMessage();
-                if (msg == null) {
-                    throw new MIMEParsingException(ioe);
-                }
-                // close input stream and continue processing for partial MIME exceptions
-                // and throw error for all other cases.
-                final String strBuf = new String(bufPartial, StandardCharsets.UTF_8);
-                isPartial = true;
-                if (msg.equals("Early EOF")) {
-                    read = -1;
-                } else if (msg.equals("Remote host timed out")) {
-                    read = -1;
-                } else if (msg.equals("Read timed out")) {
+                if (msg != null) {
                     read = -1;
                 } else {
                     throw new MIMEParsingException(ioe);
@@ -581,7 +558,7 @@ class MIMEParserPartial extends MIMEParser {
      * @author wayneng
      *
      */
-    class LineInputStreamPartial extends MIMEParser.LineInputStream {
+    class LineInputStream extends MIMEParser.LineInputStream {
         /** No change from base class. */
         private int offset;
 
@@ -610,9 +587,6 @@ class MIMEParserPartial extends MIMEParser {
                 }
                 if (offset + hdrLen + 1 >= lenPartial) { // No more data in the stream
                     assert eofPartial;
-                    parsedPartial = true;
-                    isPartialHeader = true;
-                    isPartial = true;
                     return null;
                 }
                 if (bufPartial[offset + hdrLen] == '\r' && bufPartial[offset + hdrLen + 1] == '\n') {

@@ -3,10 +3,10 @@
  *
  * Copyright (c) 1997-2015 Oracle and/or its affiliates. All rights reserved.
  *
- * The contents of this file are subject to the terms of either the GNU
+ * The contents of this file are subject to the terms of either the GNU 
  * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License").  You
- * may not use this file except in compliance with the License.  You can
+ * and Distribution License("CDDL") (collectively, the "License").  You 
+ * may not use this file except in compliance with the License.  You can 
  * obtain a copy of the License at
  * http://glassfish.java.net/public/CDDL+GPL_1_1.html
  * or packager/legal/LICENSE.txt.  See the License for the specific
@@ -88,8 +88,6 @@ public class MIMEMessagePartial extends MIMEMessage {
     private final Map<String, MIMEPartPartial> partsMapPartial = new HashMap<>(initialCapacityPartial);
     /** boolean for partial message. */
     private boolean isPartial = false;
-    /** boolean for partial header if partial message. */
-    private boolean isPartialHeader = false;
 
     /**
      * see MIMEMessage.MIMEMessage(InputStream, String, MIMEConfig)
@@ -130,9 +128,6 @@ public class MIMEMessagePartial extends MIMEMessage {
     public List<MIMEPartPartial> getAttachmentsPartial() {
         if (!parsedPartial) {
             parseAllPartial();
-        }
-        if (partsListPartial == null || partsListPartial.size() == 0) {
-            throw new MIMEParsingException("MIMEMessage has no parts");
         }
         return partsListPartial;
     }
@@ -277,7 +272,7 @@ public class MIMEMessagePartial extends MIMEMessage {
             break;
 
         case HEADERS:
-            MIMEEventPartial.HeadersPartial headers = (MIMEEventPartial.HeadersPartial) eventPartial;
+            MIMEEventPartial.Headers headers = (MIMEEventPartial.Headers) eventPartial;
             InternetHeaders ih = headers.getHeaders();
             List<String> cids = ih.getHeader("content-id");
             String cid = (cids != null) ? cids.get(0) : currentIndexPartial + "";
@@ -286,13 +281,6 @@ public class MIMEMessagePartial extends MIMEMessage {
             }
             MIMEPartPartial listPart = (currentIndexPartial < partsListPartial.size()) ? partsListPartial.get(currentIndexPartial) : null;
             MIMEPartPartial mapPart = getDecodedCidPart(cid);
-            boolean headerIsPartial = headers.getIsPartial();
-            if (headerIsPartial) {
-                isPartialHeader = headerIsPartial;
-                isPartial = headerIsPartial;
-                parsedPartial = true;
-                break;
-            }
             if (listPart == null && mapPart == null) {
                 currentPartPartial = getPart(cid);
                 partsListPartial.add(currentIndexPartial, currentPartPartial);

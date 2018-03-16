@@ -9,9 +9,8 @@ import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.ReaderInterceptorContext;
 
-import org.glassfish.jersey.message.internal.EntityInputStream;
-import org.glassfish.jersey.message.internal.ReaderInterceptorExecutor;
 import org.glassfish.jersey.media.multipart.MultiPartPartialBinder;
+import org.glassfish.jersey.message.internal.EntityInputStream;
 
 /**
  * This class is same as Terminal reader interceptor {ReaderInterceptorExecutor.TerminalReaderInterceptor} of Jersey. Only difference is this
@@ -58,19 +57,14 @@ public class MultiPartPartialReaderInterceptor implements ReaderInterceptor {
 
         /** Input stream. */
         private final InputStream original;
-
-        /** reader object which will be used to convert input stream to Java Object. */
-        private final MessageBodyReader reader;
-
         /**
          * Constructor.
          *
          * @param original input stream.
          * @param reader object which will be used to convert input stream to Java Object.
          */
-        private UnCloseableInputStream(final InputStream original, final MessageBodyReader reader) {
+        private UnCloseableInputStream(final InputStream original, final MessageBodyReader<?> reader) {
             this.original = original;
-            this.reader = reader;
         }
 
         /**

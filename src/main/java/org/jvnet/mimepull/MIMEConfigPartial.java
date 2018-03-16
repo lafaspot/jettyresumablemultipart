@@ -79,8 +79,8 @@ public class MIMEConfigPartial extends MIMEConfig {
      * @param prefix String.
      * @param suffix String.
      */
-    private MIMEConfigPartial(final boolean parseEagerly, final int chunkSize, final long inMemoryThreshold, final String dir, final String prefix,
-            final String suffix, final boolean enablePartial, final int maxMIMESize) {
+    private MIMEConfigPartial(boolean parseEagerly, int chunkSize, long inMemoryThreshold, String dir, String prefix, String suffix,
+            final boolean enablePartial, final int maxMIMESize) {
         this.parseEagerly = parseEagerly;
         this.chunkSize = chunkSize;
         this.memoryThreshold = inMemoryThreshold;
